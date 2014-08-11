@@ -1,0 +1,166 @@
+---
+title: "An Introduction to R"
+subtitle: "Part 2: Working with Numbers"
+author: "Philipp"
+date: "Saturday, August 09, 2014"
+output: html_document
+runtime: shiny
+---
+ 
+```{r echo=FALSE}
+ 
+library(stringr)
+ 
+printInlineConsole = function(id, input="", label="Console:",output="Output: "){
+tags$div(class = "header", style="width:100%",
+tags$label(label, style="font-weight:bold"),
+tags$input(id=paste("code",id,sep="-"), type="text", style="width:100%", value=input),
+tags$label(output),
+verbatimTextOutput(paste("coderun", id, sep="-")))
+}
+ 
+printConsole = function(id, input="", plot = FALSE){
+if (plot == TRUE){
+tags$div(class = "header", style="width:100%",
+tags$label("Console:"),
+tags$textarea(id=paste("code",id,sep="-"), type="text", style="width:100%",rows="5", input),
+tags$label("Plot:"),
+plotOutput(paste("codeplot", id, sep="-")))
+} else {
+tags$div(class = "header", style="width:100%",
+tags$label("Console:"),
+tags$textarea(id=paste("code",id,sep="-"), type="text", style="width:100%", input),
+tags$label("Output:"),
+verbatimTextOutput(paste("coderun", id, sep="-")))
+}
+}
+ 
+printOutput = function(id){
+terminalId = paste("code",id,sep="-")
+output[[paste("coderun",id, sep="-")]] = renderPrint({
+plotloc=str_locate(input[[terminalId]],"plot")
+eval(parse(text=input[[terminalId]]))
+})
+output[[paste("codeplot",id, sep="-")]] = renderPlot({
+plotloc=str_locate(input[[terminalId]],"plot")
+eval(parse(text=input[[terminalId]]))
+})
+}
+```
+## Numbers
+### Arithmetic
+To add two numbers together, let's say two and three, we type
+```{r echo=FALSE}
+printInlineConsole("1", "2+3")
+printOutput("1")
+```
+Since we might want to further work with the result, we should assign this value to a variable which we call x as follows
+```{r echo=FALSE}
+printInlineConsole("2", "x <- 2+3")
+printOutput("2")
+```
+In R, there are actually two assignment operators, namely `<-` and `=`. The former is traditionally used in R, but since both of them work, it comes down to a matter of personal preference which one to use.
+ 
+As you can see, if one assigns the result of the operation `2 + 3` to a variable, no output is printed to the console. To check that `x` is now equal to five, just append `; x` in the console.
+Besides addition, R supports the following
+artihmetic operators:
+- Addition (+)
+- Subtraction (-)
+- Division (/)
+- Multiplication (*)
+- Modulo (%/%)
+- Matrix Multiplication (%*%)
+ 
+Try to complete the following assignments:
+ 
+```{r echo=FALSE}
+ 
+printInlineConsole("a1e1",label="Calculate 7 + 3",output="")
+printOutput("a1e1")
+ 
+printInlineConsole("a1e2",label="Subtract 20 from 120",output="")
+printOutput("a1e2")
+ 
+printInlineConsole("a1e3",label="Divide 12 by 0 and find out what happens!",output="")
+printOutput("a1e3")
+ 
+```
+ 
+R defines the values `Inf` and `-Inf` for positive and negative infinity. Usually, one only encounters them when dividing something by zero (so division by zero is allowed in R, as its is in all programming languages implementing the IEEE standard for floating-point arithmetic).
+ 
+```{r echo=FALSE}
+printInlineConsole("a1e4",label="Try to divide 0 by 0",output="")
+printOutput("a1e4")
+ 
+```
+ 
+The value `NaN` stands for *Not a Number* and occurs when the result of a mathematical operation does not exist, e.g. taking the square root of a negative number, dividing 0 by 0 etc.
+ 
+```{r echo=FALSE}
+printInlineConsole("a1e5",label="Calculate 8 modulo 3",output="")
+printOutput("a1e5")
+```
+ 
+ 
+### Vectors
+ 
+When working with numeric data in R, one will seldomly operate with single numbers. Instead, one will have to deal with *vectors* of numbers. A vector in R can be created by using the `c()` function which takes an arbitrary number of values and concatenates them into a resulting vector. For example, the command
+ 
+```{r echo=FALSE}
+printInlineConsole("3", "c(17371618, 16799700, 9181377)")
+printOutput("3")
+```
+ 
+creates a vector with four elements holding the supplied values. The values themselves are the Gross Domestic Products (GDP) for the three countries with the highest GDP according to the United Nations. Can you guess what the countries are? I have taken the values from [this Wikipedia page](http://en.wikipedia.org/wiki/List_of_countries_by_GDP_%28nominal%29), in case you want to check. Since we want to work with this data, let us store it in a variable:
+ 
+```{r echo=FALSE}
+printInlineConsole("4", "gdp = c(17371618, 16799700, 9181377)")
+printOutput("4")
+```
+ 
+The nice this in R is that vectors can be used in mathematical expressions just like single numbers. The GDP values are actually in million Dollars, so to convert them to actual dollars we would have to multiply each element by `1000000`. Nothing easier than that:
+ 
+ 
+```{r echo=FALSE}
+printConsole("5", "gdp = c(17371618, 16799700, 9181377)\n gdp * 1000000")
+printOutput("5")
+```
+ 
+ 
+### Logical Operators
+ 
+To evaluate whether certain statements are true or false, R provides the following logical operators:
+ 
+- Smaller than (<)
+- Smaller or equal (<=)
+- Greater than (>)
+- Greater or equal (>=)
+- Equal to (==)
+- Not equal to (!=)
+ 
+For example, we can check whether `23 * 37` is equal to 781 by typing
+ 
+```{r echo=FALSE}
+printInlineConsole("6", "23 * 37 == 121")
+printOutput("6")
+```
+ 
+Oh, so it seems that the answer `781` is not correct, as R tells us that the logical expression evaluates to `FALSE`. In total, there are three possible results a logical value can have in R: `TRUE`, `FALSE` and `NA` for not available. Try to fix above statement by putting in the correct result of this multiplication (if you do not want to calculate it in your head, use the console to print out the result before!).
+ 
+Logical expressions can be combined: If `l1` is the first logical expression and `l2` the second one, then `l1 & l2` is their intersection (= true if both of them are true) and `l1 | l2` is their union (= true if either of them is true). For example,
+```{r, echo=FALSE}
+printInlineConsole("7", " 3 < 7 | 8 > 5")
+printOutput("7")
+```
+ 
+is true because the individual expressions are both true. But even if one of the expressions was false, the result would nonetheless be true since we have been using the `|` OR operator. Try to make first one of the statements false and then the second to observe that only in the latter case the output changes to `FALSE`.
+ 
+Logical expressions can be used in computations, in which `FALSE` is coerced to zero and `TRUE` to one. A common situation where this is useful is when one want to check how many entries in a vector fulfill a certain requirement. We might have data collected for patients in a medical study, and want to check how many of them are older than a certain age.
+ 
+Let us assume that the ages are stored in a vector with the name `ages` and our cutoff-point is `55`. Since almost all operations in R are vectorized, this code can be concisely written as `sum(ages < 55)`.
+ 
+ 
+## Useful functions
+ 
+```{r echo=FALSE}
+```
