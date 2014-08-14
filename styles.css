@@ -1,0 +1,52 @@
+body {
+  font-family: 'Open-Sans', sans-serif;
+  font-size: 16px;
+}
+
+button {
+    font-family: 'Open-Sans', sans-serif;
+}
+
+h1 {
+  color: Indigo;
+  font-family: 'Lato', sans-serif;
+  font-size: 32px;
+}
+
+h4 {
+  font-size: 16px;
+}
+
+.shiny-bound-input{
+  width: 95%;
+  float: left;
+}
+
+.shiny-text-output{
+  width: 94.5%;
+  clear:left;
+}
+
+.exercise_input {
+  width: 85% !important;
+  
+}
+
+.exercise_solution_btn {
+  height: 30px;
+  width: 10%;
+  float: left;
+}
+
+textarea {
+  height: 80px;
+}
+
+div .hint{
+  padding: 0px 10px 5px 10px;
+  border-style: solid;
+  border-color: gainsboro;
+  border-width: 2px;
+  width: 75%;
+  margin: 20px auto 20px auto;
+}

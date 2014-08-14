@@ -1,36 +1,54 @@
 ---
 title: "An Introduction to R"
 subtitle: "Part 2: Working with Numbers"
-author: "Philipp"
-date: "Saturday, August 09, 2014"
-output: html_document
+author: "Philipp Burckhardt <pgb@andrew.cmu.edu>"
+output:
+html_document:
+theme: null
+highlight: null
+css: styles.css
 runtime: shiny
 ---
+
+<link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=Lato:400,700' rel='stylesheet' type='text/css'>
  
 ```{r echo=FALSE}
  
+includeScript("www/solutionButton.js")
+
 library(stringr)
  
-printInlineConsole = function(id, input="", label="Console:",output="Output: "){
-tags$div(class = "header", style="width:100%",
-tags$label(label, style="font-weight:bold"),
-tags$input(id=paste("code",id,sep="-"), type="text", style="width:100%", value=input),
-tags$label(output),
-verbatimTextOutput(paste("coderun", id, sep="-")))
+printInlineConsole = function(id, input="", label="Console:",output="Output: ", solution=""){
+if (solution != ""){
+  tags$div(class = "header", style="width:100%",
+  tags$label(label, style="font-weight:bold"),
+  tags$input(id=paste("code",id,sep="-"), type="text", value=input, class="exercise_input"),
+  tags$button(id=paste("btn",id,sep="-"),type="button", value=solution, class="exercise_solution_btn","Solution"),
+  tags$label(output),
+  verbatimTextOutput(paste("coderun", id, sep="-"))) 
+
+} else {
+  tags$div(class = "header", style="width:100%",
+  tags$label(label, style="font-weight:bold"),
+  tags$input(id=paste("code",id,sep="-"), type="text", value=input),
+  tags$label(output),
+  verbatimTextOutput(paste("coderun", id, sep="-"))) 
+}
 }
  
-printConsole = function(id, input="", plot = FALSE){
+printConsole = function(id, input="", label="Console:", output="Ouput:",plot = FALSE){
 if (plot == TRUE){
 tags$div(class = "header", style="width:100%",
-tags$label("Console:"),
-tags$textarea(id=paste("code",id,sep="-"), type="text", style="width:100%",rows="5", input),
-tags$label("Plot:"),
+tags$label(label, style="font-weight:bold"),
+tags$textarea(id=paste("code",id,sep="-"), type="text",rows="5", input),
+tags$label(output),
 plotOutput(paste("codeplot", id, sep="-")))
 } else {
 tags$div(class = "header", style="width:100%",
-tags$label("Console:"),
-tags$textarea(id=paste("code",id,sep="-"), type="text", style="width:100%", input),
-tags$label("Output:"),
+tags$label(label, style="font-weight:bold"),
+tags$textarea(id=paste("code",id,sep="-"), type="text", input),
+tags$label(output),
 verbatimTextOutput(paste("coderun", id, sep="-")))
 }
 }
@@ -47,23 +65,27 @@ eval(parse(text=input[[terminalId]]))
 })
 }
 ```
+
 ## Numbers
 ### Arithmetic
-To add two numbers together, let's say two and three, we type
+
+To add two numbers to each other, let us say two and three, we type
 ```{r echo=FALSE}
 printInlineConsole("1", "2+3")
 printOutput("1")
 ```
 Since we might want to further work with the result, we should assign this value to a variable which we call x as follows
 ```{r echo=FALSE}
-printInlineConsole("2", "x <- 2+3")
+printConsole("2", "x <- 2+3")
 printOutput("2")
 ```
 In R, there are actually two assignment operators, namely `<-` and `=`. The former is traditionally used in R, but since both of them work, it comes down to a matter of personal preference which one to use.
  
-As you can see, if one assigns the result of the operation `2 + 3` to a variable, no output is printed to the console. To check that `x` is now equal to five, just append `; x` in the console.
+As you can see, if one assigns the result of the operation `2 + 3` to a variable, no output is printed to the console. To check that `x` is now equal to five, just append a new line and type ` x` in above console. Alternatively, when wrapping the assignment `x <- 2+3` inside `()`, the assignment takes place and the assigned value is printed to the console. Try it out!
+
 Besides addition, R supports the following
-artihmetic operators:
+arithmetic operators:
+
 - Addition (+)
 - Subtraction (-)
 - Division (/)
@@ -71,17 +93,20 @@ artihmetic operators:
 - Modulo (%/%)
 - Matrix Multiplication (%*%)
  
-Try to complete the following assignments:
- 
+With this knowledge, try to complete the following assignments:
+
+#### Exercises 
+
 ```{r echo=FALSE}
  
-printInlineConsole("a1e1",label="Calculate 7 + 3",output="")
+printInlineConsole("a1e1",label="Calculate 7 + 3",output="",solution="7+3")
 printOutput("a1e1")
  
-printInlineConsole("a1e2",label="Subtract 20 from 120",output="")
+printInlineConsole("a1e2",label="Subtract 20 from 120",output="", solution="120-20")
 printOutput("a1e2")
  
-printInlineConsole("a1e3",label="Divide 12 by 0 and find out what happens!",output="")
+printInlineConsole("a1e3",label="Divide 12 by 0 and find out what happens!",output="",
+                   solution="12 / 0")
 printOutput("a1e3")
  
 ```
@@ -100,33 +125,129 @@ The value `NaN` stands for *Not a Number* and occurs when the result of a mathem
 printInlineConsole("a1e5",label="Calculate 8 modulo 3",output="")
 printOutput("a1e5")
 ```
- 
- 
+
+
+```{r echo=FALSE}
+printInlineConsole("a1e6",label="Calculate 183 times 1,000,000",output="")
+printOutput("a1e6")
+```
+
+<div class="hint">
+<h4>Remark:</h4>
+Very small and very large numbers are printed in R using scientific notation. Even if it might look very alien if one has not encountered it before, it is actually very simple. The value $$1.737162e+13$$ stands for $$1.737162 * 10^{13},$$
+that is we multiply the number before the $e$ with $10$ raised to the power $p$, where $p$ is the part of the number after $e$. It is also possible that the number after $e$ starts with a minus sign. Then we are dealing with a very small number, as we have to multiply the first part with $10$ raised to a negative power.
+</div>
+
 ### Vectors
  
-When working with numeric data in R, one will seldomly operate with single numbers. Instead, one will have to deal with *vectors* of numbers. A vector in R can be created by using the `c()` function which takes an arbitrary number of values and concatenates them into a resulting vector. For example, the command
+When working with numeric data in R, one will seldomly operate with single numbers. Instead, one will have to deal with *vectors* of numbers. A vector in R can be created by using the `c()` function which takes an arbitrary number of values and concatenates them forming a vector. Here is a vector containing the numbers from one to five:
+
+```{r echo=FALSE}
+printInlineConsole("3a", "c(1,2,3,4,5)")
+printOutput("3a")
+```
+
+Vectors of incrementing integers can be more easily created by using the `:` operator: Above expression is equivalent to `1:5`. Replace above expression by using the colon operator and print out a larger vector of numbers, maybe the numbers from one to 200. You can also create a sequence of decreasing integers by first typing the start integer, then the colon, and then the smaller end integer: 
+
+```{r echo=FALSE}
+printInlineConsole("3b", "10:1")
+printOutput("3b")
+```
+
+To create a vector holding the same number multiple times, one can use the `rep` function. Remember that in order to find out how to use the `rep` function, you can simply type `?rep` into the console, which will open a new tab in your browser showing the R help page of the function. Now try to create a vector consisting of ten zeros. 
+
+```{r echo=FALSE}
+printInlineConsole("3c", "")
+printOutput("3c")
+```
+
+In case that one need to create more complex sequences, the `seq` function might be useful. You can have a look at its help page and try out some of the examples, which you always find at the bottom of the page:
+
+```{r echo=FALSE}
+printConsole("3d", "")
+printOutput("3d")
+```
+
+However, the most important part is not how we can create vectors, but rather how we can work with them. Let us consider as a running example the following vector 
  
 ```{r echo=FALSE}
 printInlineConsole("3", "c(17371618, 16799700, 9181377)")
 printOutput("3")
 ```
  
-creates a vector with four elements holding the supplied values. The values themselves are the Gross Domestic Products (GDP) for the three countries with the highest GDP according to the United Nations. Can you guess what the countries are? I have taken the values from [this Wikipedia page](http://en.wikipedia.org/wiki/List_of_countries_by_GDP_%28nominal%29), in case you want to check. Since we want to work with this data, let us store it in a variable:
+which holds the Gross Domestic Products (GDP) for the three countries with the highest GDP according to the United Nations, in millions of US$. The countries are the US, China and Japan, in that order. I have taken the values from [this Wikipedia page](http://en.wikipedia.org/wiki/List_of_countries_by_GDP_%28nominal%29). Let us first assign the vector to a variable:
  
 ```{r echo=FALSE}
-printInlineConsole("4", "gdp = c(17371618, 16799700, 9181377)")
+printConsole("4", "gdp <- c(16244600, 8358400, 5960180)")
 printOutput("4")
 ```
  
-The nice this in R is that vectors can be used in mathematical expressions just like single numbers. The GDP values are actually in million Dollars, so to convert them to actual dollars we would have to multiply each element by `1000000`. Nothing easier than that:
+To access a specific element of a vector, one types the name of the vector followed by `[index]` where index is an integer specifying the position of the element which one would like to retrieve. Since indices start with one in R, `gdp[1]` will return `16244600`. Select the individual elements of the gdp vector. Observe also what happens if you select an index larger than the length of the vector. If you are unsure how many elements a vector has, you can use the `length` function as in `length(gdp)`. It is also possible to put a vector of indices into the square brackets. `gdp[1:2]` will return the first two elements of the gdp vector, whereas `gdp[c(1,3)]` will return the first and third element. As if that was not enough, it is also possible to supply a negative index. In that case, the returned vector consists of all elements *except* those corresponding to the supplies index. Thus, `gdp[c(1,3)]` is equivalent to `gdp[-2]`.
+
+Also very useful are the functions `max` and `min`,  which return the largest and smallest element of a vector, respectively. 
  
  
+Vectors in R cannot only hold numeric data, but any data type such as dates, strings etc. 
+
+Let us also create a string containing the names of the countries with above GDPs:
+
 ```{r echo=FALSE}
-printConsole("5", "gdp = c(17371618, 16799700, 9181377)\n gdp * 1000000")
-printOutput("5")
+printInlineConsole("4b", "countries <- c('USA', 'China', 'Japan')")
+printOutput("4b")
 ```
- 
- 
+
+However, all of the elements in a vector must be of the same type. If this is not the case, R silently coerces some of the values such that all elements end up having the same type:
+
+
+```{r echo=FALSE}
+printInlineConsole("4a", "c(3,'I am a string')")
+printOutput("4a")
+```
+
+In many cases, the absolute GDP is not very meaningful as it does not take population size into account. Instead, we would like to calculate the GDP *per capita*. This is very easy to do in R, as vectors can be used in mathematical expressions just like single numbers. 
+
+To demonstrate this, let us first create a vector holding the populations sizes for the three countries. Using scientific notation, we create the vector as follows:
+
+```{r echo=FALSE}
+printInlineConsole("4c", "pop <- c(317e+6, 1.35e+9, 127.6e+6)")
+printOutput("4c")
+```
+
+Calculating the GDP *per capita* is then as simple as typing `gdp / pop`. Putting it all together, we have
+
+```{r echo=FALSE}
+printConsole("4d", "gdp <- c(16244600, 8358400, 5960180)\npop <- c(317e+6, 1.35e+9, 127.6e+6)\ngdp_per_capita <- gdp / pop\ngdp_per_capita")
+printOutput("4d")
+```
+
+The resulting values are still in million US\$. Try to multiply the result vector by one million to obtain the per capita GDP in US dollars. 
+As we can see, when multiplying a vector by a single number in R, each element of the vector is multiplied by it. However, when we were dividing the GDP vector by the population vector, the division was done element-wise. This holds in general: if one uses the mathematical operations $+,-,/,*$ with two vectors (or matrices for that matter), all of them are carried out element-wise. Unfortunately no error is thrown if the vectors are not of the same length, but instead the vector with the smaller amount of elements is enlarged by copying its elements until it matches the length of the longer vector:
+
+```{r echo=FALSE}
+printConsole("4e", "x <- c(10,20,30)\ny <- c(5,2)\nx+y")
+printOutput("4e")
+```
+
+#### Exercises 
+
+```{r echo=FALSE}
+printInlineConsole("a2e1",label="Create a vector holding the integers from 1:10:",output="")
+printOutput("a2e1")
+
+printInlineConsole("a2e2",label="Create the vector c(0.1, 0.2, 0.3, 0.4, 0.5) using the seq function:",output="")
+printOutput("a2e2")
+
+printInlineConsole("a2e3",output="",label="Calculate the length of the vector 1:10:")
+printOutput("a2e3")
+
+printConsole("a2e4",input="x <- c(2,5,10)\ny <- c(10,15,20)",label="Subtract the largest element of x from the smallest element of y:",output="")
+printOutput("a2e4")
+
+printConsole("a2e5",input="x <- 1:100",label="Select every even number of x (Hint: Use a combination of [] and the seq function):",output="")
+printOutput("a2e5")
+```
+
+
 ### Logical Operators
  
 To evaluate whether certain statements are true or false, R provides the following logical operators:
@@ -158,9 +279,45 @@ is true because the individual expressions are both true. But even if one of the
 Logical expressions can be used in computations, in which `FALSE` is coerced to zero and `TRUE` to one. A common situation where this is useful is when one want to check how many entries in a vector fulfill a certain requirement. We might have data collected for patients in a medical study, and want to check how many of them are older than a certain age.
  
 Let us assume that the ages are stored in a vector with the name `ages` and our cutoff-point is `55`. Since almost all operations in R are vectorized, this code can be concisely written as `sum(ages < 55)`.
- 
- 
-## Useful functions
- 
-```{r echo=FALSE}
+
+The two functions `all(cond)` and `any(cond)` return true if all the elements of the supplied vector are true or if at least one is true, respectively. 
+
+```{r, echo=FALSE}
+printConsole("7a", "ages <- c(75, 57, 33, 29, 15)\ncond<- ages > 65\nall(cond)")
+printOutput("7a")
 ```
+
+Replace `all` with `any` in above console and observe whether the result changes to true, as one would expect since there is one person with an age of 75.
+
+<div class="hint">
+<h4>Remark:</h4>
+When working with floating-point numbers, one has to be careful when checking for equality: Since numbers cannot be stored up to arbitrary precision in a computer, it is not possible to find an exact representation for every number, and so operations like addition might yield very un-intuitive results due to rounding errors:
+```{r, echo=FALSE}
+printInlineConsole("8", "0.1 + 0.2 == 0.3")
+printOutput("8")
+```
+As a solution to this problem, one should instead check whether the absolute value of the difference between the numbers is smaller than some small value $\epsilon$:
+```{r, echo=FALSE}
+printConsole("9", "x <- 0.1 + 0.2\ny <- 0.3\nabs(x-y) < 0.0001")
+printOutput("9")
+```
+For those interested in learning more about why this happens, I recommend the article 
+*[What Every Computer Scientist Should Know About Floating-Point Arithmetic](http://docs.oracle.com/cd/E19957-01/806-3568/ncg_goldberg.html)*.
+</div>
+
+## Other useful math functions
+ 
+In the following section, some of the most useful functions for working with numbers in R are listed. All of them can be used either on a single value $x$ or a vector of values. In case of the latter, the returned value is also a vector whose elements are the results of applying the function to each element of $x$.
+
+- `abs(x)`: calculates the absolute value of x.
+- `sign(x)`: return $+1$, $0$,$-1$ depending on the sign of x.
+- `sqrt(x)`: square root of x.
+- `floor(x)`: returns the greatest integer not greater than x.
+- `ceiling(x)`: returns the smallest integer not less than x.
+- `trunc(x)`: Returns the integer formed by cutting off all digits after the dot.
+- `round(x, digits=0)`: Rounds $x$ to the supplied number of digits, by default zero.
+
+<div class="hint">
+<h4>Reminder:</h4>
+In case that you have forgotten how a certain function works or what its arguments are, you can type `?` followed by the name of the function into the console. This will open the help page for the function, which gives detailed information about how to use it. In case that you are using *RStudio*, pressing the TAB key after typing something opens a context menu holding most relevant information about all functions which begin with the typed characters. Pressing F1 opens the help page for the selected function.
+</div>
