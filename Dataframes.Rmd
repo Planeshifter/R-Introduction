@@ -1,0 +1,10 @@
+---
+title: "An Introduction to R"
+subtitle: "Part 5: On Data Frames & Importing Data"
+output:
+html_document:
+theme: null
+highlight: null
+css: css/styles.css
+runtime: shiny
+---

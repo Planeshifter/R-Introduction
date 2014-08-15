@@ -1,0 +1,10 @@
+---
+title: "An Introduction to R"
+subtitle: "Part 3: Sampling"
+output:
+html_document:
+theme: null
+highlight: null
+css: styles.css
+runtime: shiny
+---

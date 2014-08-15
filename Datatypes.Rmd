@@ -1,0 +1,10 @@
+---
+title: "An Introduction to R"
+subtitle: "Part 4: Other Data Types"
+output:
+html_document:
+theme: null
+highlight: null
+css: css/styles.css
+runtime: shiny
+---

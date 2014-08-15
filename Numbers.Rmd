@@ -1,12 +1,11 @@
 ---
 title: "An Introduction to R"
 subtitle: "Part 2: Working with Numbers"
-author: "Philipp Burckhardt <pgb@andrew.cmu.edu>"
 output:
 html_document:
 theme: null
 highlight: null
-css: styles.css
+css: css/styles.css
 runtime: shiny
 ---
 
