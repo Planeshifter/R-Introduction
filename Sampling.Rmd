@@ -5,6 +5,7 @@ output:
 html_document:
 theme: null
 highlight: null
-css: styles.css
+css: css/styles.css
 runtime: shiny
 ---
+

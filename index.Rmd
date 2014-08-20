@@ -13,7 +13,7 @@ runtime: shiny
 <li class="span4">
   <div class="caption">
     <h3>Getting Started</h3>
-    <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
+    <p>The introduction to the statistical programming language R begins with a short outline of its history and a discussion of its merits as a tool for data analysis. Then, several ways of how one can run R are presented and its interface is explained.</p>
     <p><a class="btn btn-primary" href="GettingStarted.Rmd">Open</a></p> 
   </div>
 </li> 
@@ -21,15 +21,15 @@ runtime: shiny
 <li class="span4">
   <div class="caption">
     <h3>Numbers</h3>
-    <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
-    <p><a class="btn btn-primary" href="Numbers.Rmd">Open</a></p>
+    <p>In the second part of the tutorial, it is shown how R can be used as a calculator to work with numbers. Also, *vectors* are introduced being the most fundamental data type in R, a collection of ordered elements. </p>
+    <p><a class="btn btn-primary" href="Numbers.Rmd">Open</a></p> 
   </div>
 </li>
 
 <li class="span4">
   <div class="caption">
     <h3>Other Data Types</h3>
-    <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
+    <p>Other fundamental data types besides *vectors* are introduced, namely *matrices*, *arrays* and *lists*. Also, *data frames* are extensively covered as they are the data type one works with the most when analyzing data.</p>
     <p><a class="btn btn-primary" href="Datatypes.Rmd">Open</a></p>
   </div>
 </li> 
@@ -37,22 +37,22 @@ runtime: shiny
 <div class="row-fluid">
 <li class="span4">
   <div class="caption">
-    <h3>Data Frames</h3>
-    <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
-    <p><a class="btn btn-primary" href="Dataframes.Rmd">Open</a></p>
+    <h3>Programming Concepts</h3>
+    <p>From time to time, it will not suffice to just use the default functions to solve a given problem. In this case, one will need to write *one's* own functions. Also, *loops* and *conditions* are presented as a means to automate manual tasks and a major building block of larger programs.</p>
+    <p><a class="btn btn-primary" href="Programming.Rmd">Open</a></p>
   </div>
 </li> 
 <li class="span4">
   <div class="caption">
     <h3>Sampling</h3>
-    <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
+    <p>R comes with an extensive suite of functions to sample data points from actual data and a variety of statistical distributions. This is often very useful for simulation studies which can be used to investigate the statistical properties of estimators</p>
     <p><a class="btn btn-primary" href="Sampling.Rmd">Open</a></p>
   </div>
 </li> 
 <li class="span4">
   <div class="caption">
     <h3>Graphics</h3>
-    <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
+    <p>With R, it is possible to create beautiful plots which can be used to gain insights on data sets and as a quick means to convey the main characteristics of a data set. Functions to create *line plots*, *scatter plots* and *histograms* are presented.</p>
     <p><a class="btn btn-primary rmdlink" href="Graphics.Rmd">Open</a></p>
   </div>
 </li>

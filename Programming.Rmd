@@ -1,0 +1,245 @@
+---
+title: "An Introduction to R"
+subtitle: "Part 5: Programming Concepts"
+output:
+html_document:
+theme: null
+highlight: null
+css: css/styles.css
+runtime: shiny
+---
+
+<link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=Lato:400,700' rel='stylesheet' type='text/css'>
+ 
+```{r echo=FALSE}
+ 
+includeScript("www/solutionButton.js")
+
+library(stringr)
+ 
+printInlineConsole = function(id, input="", label="Console:",output="Output: ", solution=""){
+if (solution != ""){
+  tags$div(class = "header", style="width:100%",
+  tags$label(label, style="font-weight:bold"),
+  tags$input(id=paste("code",id,sep="-"), type="text", value=input, class="exercise_input"),
+  tags$button(id=paste("btn",id,sep="-"),type="button", value=solution, class="exercise_solution_btn","Solution"),
+  tags$label(output),
+  verbatimTextOutput(paste("coderun", id, sep="-"))) 
+
+} else {
+  tags$div(class = "header", style="width:100%",
+  tags$label(label, style="font-weight:bold"),
+  tags$input(id=paste("code",id,sep="-"), type="text", value=input),
+  tags$label(output),
+  verbatimTextOutput(paste("coderun", id, sep="-"))) 
+}
+}
+ 
+printConsole = function(id, input="", label="Console:", output="Ouput:",plot = FALSE){
+if (plot == TRUE){
+tags$div(class = "header", style="width:100%",
+tags$label(label, style="font-weight:bold"),
+tags$textarea(id=paste("code",id,sep="-"), type="text",rows="10",, input),
+tags$label(output),
+plotOutput(paste("codeplot", id, sep="-")))
+} else {
+tags$div(class = "header", style="width:100%",
+tags$label(label, style="font-weight:bold"),
+tags$textarea(id=paste("code",id,sep="-"), type="text", input),
+tags$label(output),
+verbatimTextOutput(paste("coderun", id, sep="-")))
+}
+}
+ 
+printOutput = function(id){
+terminalId = paste("code",id,sep="-")
+output[[paste("coderun",id, sep="-")]] = renderPrint({
+plotloc=str_locate(input[[terminalId]],"plot")
+eval(parse(text=input[[terminalId]]))
+})
+output[[paste("codeplot",id, sep="-")]] = renderPlot({
+plotloc=str_locate(input[[terminalId]],"plot")
+eval(parse(text=input[[terminalId]]))
+})
+}
+```
+
+## Defining your own functions
+
+As we have seen, R itself comes with many functions which help to conduct statistical analyses of data sets. And besides the R core, there are many packages which implement even the most exotic statistical methods such that one might not even need any other functions tailored to one's needs. 
+
+However, in case that you might want to write your own R packages at one time, or find some functionality missing, it it still very helpful to know how to define your own functions in R. And it is quite easy, too! 
+
+One good reason to write your own functions is that it often reduces the amount of code required to perform some sequence of tasks a bunch of times. So instead of always repeating the same number of tasks in the command line, you can simply define a function which carries out all the steps of the analysis and then run this function whenever you need to. 
+
+So how do we define a function in R? The basic syntax for a function in R is 
+
+```
+function_name = function(function_arguments){
+ # function body comes here
+ return(function_return_value)
+}
+```
+
+The name of the function, `function_name` is used to call the function. A custom-built function is called like all other functions by typing `function_name()`. Personally, I like to think of functions like kind of a vending machine: The vending machine expects you to put something in, and then it returns a certain item to you given the *arguments* that you have supplied to it. The same is true for a function: A function is an object which expects a certain number of parameters and then calculates a *return* value which is the value the call to the function evaluates to. 
+
+To make it more concrete, let us define write our own `mean` function which will take as an input a vector and return the average of its elements. Obviously this is a futile task as the default `mean` function works just fine, but it might well be used to illustrate the concepts. 
+We can do this as follows:
+
+```{r echo=FALSE}
+printConsole("1", "mean = function(x){\n  ret = (1/length(x)) * sum(x)\n  return(ret) \n}")
+printOutput("1")
+```
+
+This function takes as its sole argument a vector and then calculates the mean via the formula $\frac{1}{n} \sum_{i=1}^n x_i$, where we use the `length` and `sum` functions. This value is assigned to the variable `ret`, which is then returned via the command `return(ret)`. Observe that we can use the object passed to the function by using `x` in the function body. We could have picked any other name than `x`, for example `vec` to signal that the function expects a vector. However, in general one should not overwrite existing functions as we are doing here because this might break code which relies on the function in question. For example, our own mean function does not perform error checking like the official one.
+
+We can just as easily define a function which takes more than one argument: 
+
+```{r echo=FALSE}
+printConsole("1b", "greaterThan = function(vec, num){\n  ret = vec[vec > num]\n  return(ret)\n}\ngreaterThan(1:10, 5)")
+printOutput("1b")
+```
+
+As the example call to the function demonstrates, this function takes as its first argument a vector *vec* and then returns a new vector only consisting of the elements which are greater than the second supplied argument, *num*. When calling a function with multiple arguments, it is possible to supply the arguments in a different order than defined by explicitly writing them out, i.e. we could write above call also as `greaterThan(num=5, vec=1:10)`. It is also possible for a function to not have a return value. In this case, the function expression evaluates to NULL. Sometimes, one might use such functions to manipulate some other variables in the global environment. However, it is almost always better to construct a function which does not alter any global variables but instead takes them as input arguments for a function which does the transformation inside and then returns the new object as this ensures that the function works no matter the state of the current environment. 
+
+Finally, it is also possible to specify a default value for the parameter of a function. To do this, one simply writes `argument_name = value` with `value` being the default value when defining the function. For example, we could write our `greaterThan` function such that it by default returns only the positive elements of the vector:
+
+
+```{r echo=FALSE}
+printConsole("1b2", "greaterThan = function(vec, num=0){\n  ret = vec[vec > num]\n  return(ret)\n}\ngreaterThan(seq(-10,10,by=1))")
+printOutput("1b2")
+```
+
+In this case, the value for `num` is equal to zero inside the function environment if it is no value is supplied when calling the function.
+
+<div class="hint">
+<h4>.rprofile file</h4>
+Personally, I have created a bunch of helper functions which I regularly use while doing a statistical analysis. To ensure that these functions are always loaded in the current project when starting RStudio, it is possible to create a .rprofile file holding the function definitions in the project directory. This ensures that whenever the project is loaded, the code in the .rprofile file is executed.
+</div>
+
+## If Statements
+
+The if statement allows to run a piece of code only if a certain condition is fulfilled. It has the following syntax 
+
+```
+if ( # condition ){
+# code block
+}
+```
+
+Precisely, only if the condition evaluates to TRUE will the code inside the curly brackets be evaluated.
+
+To consider an example, let us implement a function which takes a number and checks whether it is even:
+
+```{r echo=FALSE}
+printConsole("2", "isEven = function(x){\n  ret = FALSE\n  if(x %% 2 == 0){ ret = TRUE }\n  return(ret)\n}")
+printOutput("2")
+```
+
+Let us take a closer look at how this function works: First, it assigns the Boolean value FALSE to the variable `ret`, which is the variable that will be returned from the function, as we can see from the last line of the function body, where we have `return(ret)`. The if clause `if(x %% 2 == 0){ ret = TRUE }` evaluates the condition `x %% 2 == 0` and checks whether the value of the expression is equal to TRUE. `x %% 2` is the remainder after integer division of x by 2, and so for each even number this will be equal to zero and for each odd number it will be  different from zero. Hence, the if statement executes the code in the curly brackets only if the number is even, and therefore the returned value of the function is TRUE for even numbers and FALSE for odd numbers. Try to call the function a couple of times by calling it with different arguments (e.g. append `isEven(3)` to the console).
+
+### If-Else Statements
+
+An if statement can be extended by also including an *else* clause, which specifies what happens in case that the condition evaluates to FALSE. It has the syntax
+
+```
+if ( # condition ){
+# code block executed when condition is TRUE
+} else {
+# code block executed when condition is FALSE
+}
+```
+
+```{r echo=FALSE}
+printConsole("2ex1","", "Write a function that takes a number as its argument and returns its squared value:")
+printOutput("2ex1")
+
+printConsole("2ex2", "","Generalize above function and include a second parameter, which should specify to which power the number should be raised:")
+printOutput("2ex2")
+
+printConsole("2ex3", "", "Write a function that takes a vector and prints out a message specifying whether its length is greater than ten or not using an if-else clause:")
+printOutput("2ex3")
+```
+
+## Loops
+
+### For-Loops
+
+To execute a statement a particular number of times, a so-called for loop can be used. Anyone with some prior programming experience will immediately find himself at home here, but the concept is not difficult to grasp in either case: Taking the following syntax
+
+```
+for (name in expression){
+# code block
+}
+```
+
+the for loop executes the statements inside the curly braces repeatedly with the looping variable *name* ranging through the values of *expression*, which is most of the time a vector expression like `1:10`. To give an example, we could use a for loop to add the numbers from one to 100 as follows:
+
+```{r echo=FALSE}
+printConsole("4", "mySum = 0\nfor (i in 1:100) {\n  mySum = mySum + i\n}\nmySum")
+printOutput("4")
+```
+
+Obvisouly it is much more concise to simply type `sum(1:100)` in this case. However, the latter solution is not only preferable because of brevity: Loops in R are horribly slow, and so when possible it is always more advantageous to write vectorized code. 
+
+<div class="hint">
+<h4>Timing R execution speed</h4>
+One can use the R function `system.time()` to count the time used by the code inside the parentheses. As we can see, for large data sets the loop constructs take considerable more time than their vectorized counterparts:
+```{r echo=FALSE}
+printInlineConsole("4b", "mySum = 0; system.time(for (i in 1:100000) { mySum = mySum + i})")
+printOutput("4b")
+printInlineConsole("4c", "system.time(sum(1:100000))")
+printOutput("4c")
+```
+</div>
+
+However, in many cases loops are the easiest way to implement repeated execution if there is no immediate vectorized solution.  
+
+```{r echo=FALSE}
+printConsole("4ex1","", "Find the product of the numbers from one to ten by using a for loop (how could you achieve the same using R's built-in vectorized functions?):")
+printOutput("4ex1")
+
+printConsole("4ex2", "","Write a loop that prints out five times your favorite greeting:")
+printOutput("4ex2")
+
+printConsole("4ex3", "", "Write a function using a for loop that calculates the row sums of a matrix:")
+printOutput("4ex3")
+
+printConsole("4ex4", "","Write a function that takes a numeric vector and returns a new vector which looks like the old one except that all numbers greater than 100 are set to 100:")
+printOutput("4ex4")
+```
+
+### While-Loops
+
+While loops execute a sequence of statements repeatedly until a certain condition is no longer true. They have the following syntax:
+
+```
+while (condition) {
+# code block
+} 
+```
+
+Using a while loop to calculate the sum of the numbers from one to 100:
+
+```{r echo=FALSE}
+printConsole("5", "sum = 0; i = 0
+while(i < 100){
+  i = i + 1
+  sum = sum + i
+}
+sum")
+printOutput("5")
+```
+
+Notice that a while loop is only executed if the condition is fulfilled. If the condition evaluated to FALSE in the first place, the code inside the curly braces is not even executed once! If one wants to ensure that the code is always executed, one should instead use a *repeat* loop. However, this is only rarely the case, but if you are interested have a look at the documentation.
+
+```{r echo=FALSE}
+printConsole("5ex1", "","Write a while loop that prints all the integers starting from 1  until its squared value exceeds 25:")
+printOutput("5ex1")
+
+printConsole("5ex2", "","Using a while loop, write a function that for a given value n computes the sum of squared integers from 1 to n:")
+printOutput("5ex2")
+```
+
+## Apply Family of Functions
