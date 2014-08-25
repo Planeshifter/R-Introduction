@@ -9,3 +9,127 @@ css: css/styles.css
 runtime: shiny
 ---
 
+<link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=Lato:400,700' rel='stylesheet' type='text/css'>
+ 
+```{r echo=FALSE}
+ 
+includeScript("www/solutionButton.js")
+
+library(stringr)
+ 
+printInlineConsole = function(id, input="", label="Console:",output="Output: ", solution=""){
+if (solution != ""){
+  tags$div(class = "header", style="width:100%",
+  tags$label(label, style="font-weight:bold"),
+  tags$input(id=paste("code",id,sep="-"), type="text", value=input, class="exercise_input"),
+  tags$button(id=paste("btn",id,sep="-"),type="button", value=solution, class="exercise_solution_btn","Solution"),
+  tags$label(output),
+  verbatimTextOutput(paste("coderun", id, sep="-"))) 
+
+} else {
+  tags$div(class = "header", style="width:100%",
+  tags$label(label, style="font-weight:bold"),
+  tags$input(id=paste("code",id,sep="-"), type="text", value=input),
+  tags$label(output),
+  verbatimTextOutput(paste("coderun", id, sep="-"))) 
+}
+}
+ 
+printConsole = function(id, input="", label="Console:", output="Output:",plot = FALSE){
+if (plot == TRUE){
+tags$div(class = "header", style="width:100%",
+tags$label(label, style="font-weight:bold"),
+tags$textarea(id=paste("code",id,sep="-"), type="text",rows="10",, input),
+tags$label(output),
+plotOutput(paste("codeplot", id, sep="-")))
+} else {
+tags$div(class = "header", style="width:100%",
+tags$label(label, style="font-weight:bold"),
+tags$textarea(id=paste("code",id,sep="-"), type="text", input),
+tags$label(output),
+verbatimTextOutput(paste("coderun", id, sep="-")))
+}
+}
+ 
+printOutput = function(id){
+terminalId = paste("code",id,sep="-")
+output[[paste("coderun",id, sep="-")]] = renderPrint({
+plotloc=str_locate(input[[terminalId]],"plot")
+eval(parse(text=input[[terminalId]]))
+})
+output[[paste("codeplot",id, sep="-")]] = renderPlot({
+plotloc=str_locate(input[[terminalId]],"plot")
+eval(parse(text=input[[terminalId]]))
+})
+}
+```
+
+## Sampling from Data
+
+The `sample` function allows to take a random sample of a specified size from a supplied vector `x`. The first parameter of the function is the vector from which elements should be drawn, the second specifies the *size* of the sample and its third parameter called *replace* is a Boolean which determines whether the sampling should be done with our without replacement. By default, this value is equal to FALSE.
+
+```{r echo=FALSE}
+printInlineConsole("1", "sample(1:10, size=3)","This command takes three random numbers without replacement from the integers from one to ten:")
+printOutput("1")
+```
+
+Since we are drawing without replacement in above example, it is not possible to draw a sample with size larger than 10 (if the size is equal to 10, we just recover our original data vector). 
+To sample with replacement, we do
+
+```{r echo=FALSE}
+printInlineConsole("2", "sample(1:10, size=20, replace=TRUE)")
+printOutput("2")
+```
+
+The sample function can be conveniently used to draw a random sample of observations from a matrix or data frame. This is achieved by randomly drawing a vector of indices and then returning the subset of the matrix corresponding to these indices. R comes with a data set containing measurements of height and weight of 15 women. Let us randomly select five of these women:
+
+```{r echo=FALSE}
+printConsole("3", "data(women)\ninSample = sample(1:nrow(women), size=5)\nwomen[inSample,]")
+printOutput("3")
+```
+
+Finally, the `sample` function can also be used to draw samples from a discrete distribution by supplying a vector of probabilities as its fourth argument. To draw from the distribution 
+
+<table>
+<tr><th>Value:</th><td>0</td><td>1</td></tr>
+<tr><th>Prob:</th><td>0.7</td><td>0.3</td></tr>
+</table>
+
+we can call 
+
+```{r echo=FALSE}
+printInlineConsole("4", "sample(c(0,1), size=6, replace=TRUE, prob=c(0.7,0.3))")
+printOutput("4")
+```
+
+
+```{r echo=FALSE}
+printInlineConsole("1ex1","", "Flip 100 fair coins and count the number of heads (Hint: Sample from c(0,1), where 0 = Tails and 1 = Heads):")
+printOutput("1ex1")
+
+printInlineConsole("1ex2", "","Draw a sample of size three from the vector c(2, 8, 3, 5, 9, 7, 6) without replacement")
+printOutput("1ex2")
+
+printInlineConsole("1ex3", "", "Draw a sample of size 100 from the integers from -10 to 10 with replacement. Calculate the mean of the drawn sample")
+printOutput("1ex3")
+```
+
+## Sampling from a Statistical Distribution
+
+Besides the `sample` function, R contains functions to draw samples from a wide range of statistical distributions, calculate their probability density functions (pdf), cumulative density functions (CDF) and quantiles. Generating data from a statistical distribution is very useful in simulation studies, for example to judge the effectiveness of a new statistical method: Because the data is simulated and thus all parameters are known, it is possible to assess how well the statistical model recovers the underlying parameters.
+
+```{r echo=FALSE}
+inputPanel(
+  selectInput("n_breaks", label = "Number of bins:",
+              choices = c(10, 20, 35, 50), selected = 20),
+  
+  sliderInput("bw_adjust", label = "Bandwidth adjustment:",
+              min = 0.2, max = 2, value = 1, step = 0.2)
+)
+
+renderPlot({
+  
+})
+```
+

@@ -36,7 +36,7 @@ if (solution != ""){
 }
 }
  
-printConsole = function(id, input="", label="Console:", output="Ouput:",plot = FALSE){
+printConsole = function(id, input="", label="Console:", output="Output:",plot = FALSE){
 if (plot == TRUE){
 tags$div(class = "header", style="width:100%",
 tags$label(label, style="font-weight:bold"),

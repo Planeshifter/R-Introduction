@@ -54,3 +54,8 @@ div .hint{
 .part {
   background: gainsboro;
 }
+
+table,th,td
+{
+border:1px solid black;
+}

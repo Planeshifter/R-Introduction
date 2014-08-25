@@ -13,7 +13,7 @@ runtime: shiny
 <li class="span4">
   <div class="caption">
     <h3>Getting Started</h3>
-    <p>The introduction to the statistical programming language R begins with a short outline of its history and a discussion of its merits as a tool for data analysis. Then, several ways of how one can run R are presented and its interface is explained.</p>
+    <p>The introduction to the statistical programming language R begins with a short outline of its history and a discussion of its merits as a tool for data analysis.  Several ways of how to run R are presented and the interface is explained.</p>
     <p><a class="btn btn-primary" href="GettingStarted.Rmd">Open</a></p> 
   </div>
 </li> 
@@ -38,7 +38,7 @@ runtime: shiny
 <li class="span4">
   <div class="caption">
     <h3>Programming Concepts</h3>
-    <p>From time to time, it will not suffice to just use the default functions to solve a given problem. In this case, one will need to write *one's* own functions. Also, *loops* and *conditions* are presented as a means to automate manual tasks and a major building block of larger programs.</p>
+    <p>From time to time, it will not suffice to just use the default functions to solve a given problem. In this case, one will need to write *one's* own functions. Also, *loops* and *conditions* are presented as means to automate manual tasks and major building blocks of custom functions.</p>
     <p><a class="btn btn-primary" href="Programming.Rmd">Open</a></p>
   </div>
 </li> 
