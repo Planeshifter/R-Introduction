@@ -86,7 +86,7 @@ eval(parse(text=input[[terminalId]]))
 
 ## Overview
 
-Graphics and Plots are an area in which R truly shines. Base R provides extensive plotting capabilities, and there are many other popular libraries that can be used to create beautiful plots and graphics. Besides *base* graphics, the two libraries *lattice* and *ggplot2* are the two most widely used ones. *Lattice* is most useful for creating graphics consisting of multiple plots and three-dimensional plots, whereas *ggplot2* is more limited in its functionality but provides a very clean syntax which enables creating plots on the fly and changing elements by sequentially making changes to the plot. However, most plot types which can be created using these packages can just as well be created using the *base* graphics package, which is also the easist to get started with. Hence, we will solely consider *base* graphics in this post, but in case that you are interested in the alternatives, there are plenty of resources online to get you started.
+Graphics and Plots are an area in which R truly shines. Base R provides extensive plotting capabilities, and there are many other popular libraries that can be used to create beautiful plots and graphics. Besides *base* graphics, the two libraries *lattice* and *ggplot2* are the two most widely used ones. *Lattice* is most useful for creating graphics consisting of multiple plots and three-dimensional plots, whereas *ggplot2* is more limited in its functionality but provides a very clean syntax which enables creating plots on the fly and changing elements by sequentially making changes to the plot. However, most plot types which can be created using these packages can just as well be created using the *base* graphics package, which is also the easiest to get started with. Hence, we will solely consider *base* graphics in this post, but in case that you are interested in the alternatives, there are plenty of resources online to get you started.
 
 Let us our exploration of the plotting functions in R with the *plot* function, which is used to created scatter plots
 
@@ -107,7 +107,7 @@ The `type` parameter of the function controls whether lines or points are drawn 
   <tr><td>p</td><td>plots points</td></tr>
   <tr><td>l</td><td>plots a line</td></tr>
   <tr><td>b</td><td>both points and lines</td></tr>
-  <tr><td>o</td><td>overplotted points and lines</td></tr>
+  <tr><td>o</td><td>over-plotted points and lines</td></tr>
   <tr><td>h</td><td>histogram-like vertical lines</td></tr>
   <tr><td>s</td><td>stair step lines</td></tr>
   <tr><td>n</td><td>no plotting</td></tr>
@@ -132,7 +132,7 @@ The following arguments of the plot function allow further customization of the 
 
 - `axes`: Defaults to TRUE, if FALSE axes are suppressed
 - `main`: Title which appears at the top of the plot
-- `sub`: Substitle which appears under the x-axis
+- `sub`: Subtitle which appears under the x-axis
 - `xlim`: Constrains the range of the x-axis.
 - `ylim`: Constrains the range of the y-axis.
 
@@ -174,9 +174,9 @@ printOutput("7")
 As a short-cut, it is also possible to simply pass the expression `log(1+x)` to the curve function itself, i.e. `curve(log(1+x))`. For this to work the expression has to be written as a function of *x*.
 
 <div class="hint">
-<h4>Plotting distributons with non-default parameter values</h4>
+<h4>Plotting distributions with non-default parameter values</h4>
 
-We now know how to easily plot the distribution functions like `dxxx` (pdf), `pxxx` (cdf), `qxxx` (quantile function): We simply passing them as an argument to the `curve` function and define the range over which we would like them to be plotted. However, you might ask yourself whether we can use this approach also when we do not have the default paramters, e.g. when we want to visualize not a standard normal, but a normal with a non-zero mean. Or a uniform distribution where the domain is not over zero-one, but from zero to ten. The answer is yes! The trick is to define a new function from the basic distribution functions where the parameters are set to the appropriate values. This gan be best illustrated via an example. The following code displays the pdf of a normal with mean 15 and standard deviation of three:
+We now know how to easily plot the distribution functions like `dxxx` (pdf), `pxxx` (cdf), `qxxx` (quantile function): We simply passing them as an argument to the `curve` function and define the range over which we would like them to be plotted. However, you might ask yourself whether we can use this approach also when we do not have the default parameters, e.g. when we want to visualize not a standard normal, but a normal with a non-zero mean. Or a uniform distribution where the domain is not over zero-one, but from zero to ten. The answer is yes! The trick is to define a new function from the basic distribution functions where the parameters are set to the appropriate values. This can best be illustrated via an example. The following code displays the pdf of a normal with mean 15 and standard deviation of three:
 
 </div>
 

@@ -9,8 +9,6 @@ css: css/styles.css
 runtime: shiny
 ---
 
-
-
 <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
 <link href='http://fonts.googleapis.com/css?family=Lato:400,700' rel='stylesheet' type='text/css'>
 
@@ -87,7 +85,7 @@ eval(parse(text=input[[terminalId]]))
 
 ## Matrices
 
-In the previous section, we have already worked with *vectors*, one-dimensional arrays which hold elements of the same type. Matrices are the analog in two dimenions. We can create a matrix in R with the `matrix` function. When calling this function, we have to supply the elements of the matrix as its first argument. The second and third argument, `nrow` and `ncol`, specify how many rows and columns the matrix should have, respectively. We can create a 3x3 matrix holding the elements one to nine via the command 
+In the previous section, we have already worked with *vectors*, one-dimensional arrays which hold elements of the same type. Matrices are the analog in two dimensions. We can create a matrix in R with the `matrix` function. When calling this function, we have to supply the elements of the matrix as its first argument. The second and third argument, `nrow` and `ncol`, specify how many rows and columns the matrix should have, respectively. We can create a 3x3 matrix holding the elements one to nine via the command 
 
 ```{r echo=FALSE}
 printInlineConsole("1", "matrix(1:9, 3, 3)","A 3x3 Matrix: ","")
@@ -108,6 +106,8 @@ printInlineConsole("3", "dim(matrix(1, 3, 3))","","")
 printOutput("3")
 ```
 
+To get only the number of rows or columns, the two functions `nrow` and `ncol` can be used, respectively.
+
 As for vectors, the square brackets can be used to select part of a matrix: In this case, the indexing works via `[ , ]` as we have two dimensions. Suppose we have a matrix with the name `myMat`. To access the elem on the first row and second column, we would write `myMat[1, 2]`. Leaving one of the indices blanks retrieves all columns or rows, respectively. So `myMat[1,]` retrieves the first row, whereas `myMat[,2]` returns the second columns. Let's try this out:
 
 ```{r echo=FALSE}
@@ -116,30 +116,183 @@ myMat[ , ]","","")
 printOutput("4")
 ```
 
-Recall that you could also use a vector of indices when selecting elements from a vector. The same holds for matrices. For example, the submatrix consisting of the first three rows and three columns can be selected via the command `myMat[1:3, 1:3]`. Alternatively, it is possible to pass a negative index or vector of indices. In this case, only the columns and rows which do *not* correspond to these indices are returned. Hence, the command `myMat[1:3, 1:3]` returns the same as `myMat[-4,-4]`. Assure yourself!
+Recall that you could also use a vector of indices when selecting elements from a vector. The same holds for matrices. For example, the submatrix consisting of the first three rows and three columns can be selected via the command `myMat[1:3, 1:3]`. Alternatively, it is possible to pass a negative index or vector of indices. In this case, only the columns and rows which do *not* correspond to these indices are returned. Hence, the command `myMat[1:3, 1:3]` returns the same as `myMat[-4,-4]`. Assure yourself! 
+
+If the result of such a selection has length one on one dimension, this dimension is dropped. So `myMat[1,]` returns the first row as a vector, not as a matrix with one row and four columns. If you wish to retrieve the latter, you can use the `drop= FALSE ` argument. Compare the two results: 
 
 ```{r echo=FALSE}
-printConsole("5", "myMat = matrix(1:16, nrow = 4, ncol = 4)
-myMat[ , ]","","")
+printConsole("4b", "myMat = matrix(1:16, nrow = 4, ncol = 4)
+myMat[1, , drop=TRUE]","","")
+printOutput("4b")
+```
+
+Using `drop = FALSE` is often useful in order to ensure that code explicitly written for matrices will not break in case a one-dimensional vector is the result of some calculation.
+
+```{r echo=FALSE}
+myMat = matrix(1:16, nrow = 4, ncol = 4)
+printInlineConsole("5", "","Select the 2 x 2 submatrix of myMat in the upper-left corner")
 printOutput("5")
-printConsole("6", "myMat = matrix(1:16, nrow = 4, ncol = 4)
-myMat[ , ]","","")
+printInlineConsole("6", "","Select the first column of the matrix as a 4 x 1 matrix (use the drop argument)","")
 printOutput("6")
-printConsole("7", "myMat = matrix(1:16, nrow = 4, ncol = 4)
-myMat[ , ]","","")
-printOutput("7")
-printConsole("8", "myMat = matrix(1:16, nrow = 4, ncol = 4)
-myMat[ , ]","","")
+printInlineConsole("8", "","Select the submatrix of myMat obtained after removing the third row","")
 printOutput("8")
-printConsole("9", "myMat = matrix(1:16, nrow = 4, ncol = 4)
-myMat[ , ]","","")
+printInlineConsole("9", "","Get the dimensions of myMat","","")
 printOutput("9")
 ```
 
 ### Matrix Operations
 
-## Arrays
+Two matrices with the same dimensions can be added or subtracted from each other element-wise. We consider the matrices 
+
+$$
+A=\left(\begin{array}{ccc}
+4 & 2 & 1\\
+3 & 5 & 4\\
+6 & 1 & 2
+\end{array}\right) \text{ and } B=\left(\begin{array}{ccc}
+1 & 3 & 4\\
+2 & 0 & 1\\
+-1 & 4 & 3
+\end{array}\right)
+$$
+
+```{r}
+A = matrix(c(4,3,6,2,5,1,1,4,2), nrow = 3, ncol = 3)
+B = matrix(c(1,2,-1,3,0,4,4,1,3), nrow = 3, ncol = 3)
+```
+
+```{r echo=FALSE}
+A = matrix(c(4,3,6,2,5,1,1,4,2), nrow = 3, ncol = 3)
+B = matrix(c(1,2,-1,3,0,4,4,1,3), nrow = 3, ncol = 3)
+printInlineConsole("10", "A + B","Adds the two matrices to each other","","")
+printOutput("10")
+
+printInlineConsole("11", "","Subtract the two matrices from each other","","")
+printOutput("11")
+
+printInlineConsole("12", "","Subtract A from itself","","")
+printOutput("12")
+
+printInlineConsole("13", "","Calculate A - 2 * B","","")
+printOutput("13")
+```
+
+The transpose of a matrix is obtained by exchanging its rows and columns. In R, the `t()` function returns the transpose for any given matrix. To repeat what we have learned so far, create the matrix 
+
+$$
+C=\left(\begin{array}{ccc}
+1 & 0 & 3\\
+0 & 2 & 1
+\end{array}\right)
+$$ 
+
+and then return its transpose:
+
+```{r echo=FALSE}
+printConsole("14", " ","","","")
+printOutput("14")
+```
+
+Matrix multiplication works with the `%*%` operator. For any two matrices $A$ and $B$ with dimensions $m \times n$ and $k \times l$, matrix multiplication is only defined if $n = k$. The resulting matrix is of dimension $m \times l$.
+
+```{r echo=FALSE}
+printConsole("15", "C = matrix(c(1,2,1,2),2,2)
+D = matrix(c(0.2,0.3,0.1,0.4),2,2)
+C %*% D","","","")
+printOutput("15")
+```
+
+Last but not least, the inverse of a matrix $A$ is the matrix $A^{-1}$ such that 
+$A A^{-1} = \left(\begin{array}{ccc}
+1 & \ldots & 0\\
+\vdots & \ddots & \vdots\\
+0 & \ldots & 1
+\end{array}\right)
+ $, that is the product of a matrix and its inverse must equal the so-called *identity* matrix which has ones on its main diagonal and zeros everywhere else. The inverse can be obtained via a call to the `solve()` function. 
+
+## Arrays 
+With vectors, we already encountered arrays in one dimension and as we have just finished our discussion of matrices, we also know how to work with 2-dimensional arrays in R. As you can imagine, it is also possible to work with arrays of dimension three or larger. An array can be created in a fashion very similar to a matrix: One calls the `array` function and gives it as its first argument the vector of elements. As its second parameter, the function expects a `dim` argument which is a vector specifying the index lengths for each dimension:
+
+```{r echo=FALSE}
+printInlineConsole("16", "(Arr = array(1:18, dim=c(3,3,2)))","","","")
+printOutput("16")
+```
+
+Indexing of arrays works just as indexing with matrices, except that we have more than two dimensions and hence more commas inside of the square brackets: For example, `Arr[,,1]` returns the 3x3 matrix with elements one to nine. 
+
+```{r echo=FALSE}
+Arr = array(1:18, dim=c(3,3,2))
+printInlineConsole("17", "","Try out some of the indexing methods you have learned on the Arr array:","","")
+printOutput("17")
+```
 
 ## Data Frames
 
+You can think of data frames as the R equivalent of an Excel table. As matrices, data frames are two-dimensional: Their rows contain observations of a set of variables, where each column of a data frame corresponds to one variable. The major difference to a matrix is that each column can be of a different data type: For example, we might have collected data on participants of an experiment: If we would store them in a data frame, column would be hold their ages, which is a numeric variable, other columns would need to hold their name and first name and another column might be their birthday. 
+Data frames can either be created inside R or imported from external files. To create a data frame in R, we call the `data.frame` function and pass it the variables that it should contain:
+
+```{r echo=FALSE}
+printInlineConsole("18", "(myDataFrame = data.frame(name=c('Smith', 'Fowland','Meyer'), age=c(44, 28, 56)))","A data frame with two variables, name and age","","")
+printOutput("18")
+```
+
+Notice that each supplied vector must have the same length, otherwise an error is thrown. 
+
+<div class="hint">
+<h4>Reading Data into R</h4>
+The `read.table` function helps importing data from *.csv files, *.xls files or other data formats holding tabular data. It expects as a first argument either the full path to the file on the disk or, if the file lives in the working directory, its name: Hence, if we wish to load the file `myTable.dat` and it is located in the directory we are working in, we can simply call
+
+```
+read.table(“myTable.txt”)
+```
+Otherwise, we have to supply the full path as in 
+
+```
+read.table(“C:/Users/Philipp/Documents/myTable.txt”)
+```
+
+The `header` argument of the `read.table` function should be set to TRUE if the first line of the file contains the variable names.
+
+For "comma separated values" (csv) files, the wrapper function `read.csv` can be used which should work out of the box. Further import functions are included in the *foreign* package, which offers functionality to import other data files such as SPSS files or Stata files.
+</div>
+
+We can use the same indexing methods that we are already familiar with from working with matrices: 
+
+```{r echo=FALSE}
+myDataFrame = data.frame(name=c('Smith', 'Fowland','Meyer'), age=c(44, 28, 56))
+printInlineConsole("19", "","Select the second column of myDataFrame","","")
+printOutput("19")
+```
+
+Since the columns of the data frame are *named*, it is also possible to use the the column names when retrieving columns from the data frame: 
+
+```{r echo=FALSE}
+myDataFrame = data.frame(name=c('Smith', 'Fowland','Meyer'), age=c(44, 28, 56))
+printInlineConsole("20", "myDataFrame[,c('age')]","","","")
+printOutput("20")
+```
+
+When selecting only a single column, one can use the more expressive notation `myDataFrame$age`. Actually, not only the columns can be named, rows can have names too. To retrieve and set the column and rownames, the two functions `rownames` and `colnames` are used. 
+
+```{r echo=FALSE}
+printInlineConsole("21", "colnames(myDataFrame)","Retrieves the column names of myDataFrame:","","")
+printOutput("21")
+
+printConsole("22", "rownames(myDataFrame) = c('Subject 1', 'Subject 2', 'Subject 3')\nmyDataFrame","Sets row names for myDataFrame:","","")
+printOutput("22")
+```
+
 ## Lists
+
+Data frames are a certain type of list where each variable is a vector and all these vectors must have the same length. Lists are more general and the most flexible data type in R: They can hold data of any type, such that for example a list can itself be a member of another list! Lists are created similarly to data frames by calling the `list` function and handing it the objects that it should contain. 
+
+We could have created above data frame also as a list, using the same syntax:
+```{r echo=FALSE}
+myList = list(name=c('Smith', 'Fowland','Meyer'), age=c(44, 28, 56))
+printConsole("23", "myList = list(name=c('Smith', 'Fowland','Meyer'), age=c(44, 28, 56))\nmyList","","","")
+printOutput("23")
+```
+
+Variables stored in a list can be either accessed using `$` notation as in `myList$name` or with double square brackets, e.g `myList[[1]]` returns the first element in the list, which is equal to the vector of names. 
+
+In practice, it is never a good idea to create a list if you could store your data just as well in a data frame. The reason is that data frames come with many useful functionality and many functions make it easy to either extract or transform values stored in data frames. But whenever you run into a situation in which you cannot represent your data in a 2-dimensional table, lists are the way to go.

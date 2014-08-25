@@ -129,8 +129,8 @@ R comed out-of-the box with an extensive support for most statistica distributio
 To give a concrete example, the normal distribution has the functions `dnorm` to generate samples drawn from a normal distribution, `dnorm` to evaluate the density at different realizations of a normally distributed random variable, `pnorm` which returns the value of the cdf for the supplied values and `qnorm` which returns for given probabilities the values of the random variable will be less than or equal to them. As usual, all of these functions are vectorized, so it is possible to for example retrieve the values of the pdf for a sequence of values:
 
 ```{r echo=FALSE}
-printConsole("5", "x_seq = seq(-1, 1, by=0.1)\nx_densities = dnorm(x_seq)\nplot(x_seq, x_densities, type='l')",
-             "","",TRUE)
+printInlineConsole("5", "dnorm(seq(-1, 1, by=0.1))",
+             "","")
 printOutput("5")
 ```
 

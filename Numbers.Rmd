@@ -98,14 +98,14 @@ With this knowledge, try to complete the following assignments:
 
 ```{r echo=FALSE}
  
-printInlineConsole("a1e1",label="Calculate 7 + 3",output="",solution="7+3")
+printInlineConsole("a1e1",label="Calculate 7 + 3",output="",solution="")
 printOutput("a1e1")
  
-printInlineConsole("a1e2",label="Subtract 20 from 120",output="", solution="120-20")
+printInlineConsole("a1e2",label="Subtract 20 from 120",output="", solution="")
 printOutput("a1e2")
  
 printInlineConsole("a1e3",label="Divide 12 by 0 and find out what happens!",output="",
-                   solution="12 / 0")
+                   solution="")
 printOutput("a1e3")
  
 ```
@@ -139,14 +139,14 @@ that is we multiply the number before the $e$ with $10$ raised to the power $p$,
 
 ### Vectors
  
-When working with numeric data in R, one will seldomly operate with single numbers. Instead, one will have to deal with *vectors* of numbers. A vector in R can be created by using the `c()` function which takes an arbitrary number of values and concatenates them forming a vector. Here is a vector containing the numbers from one to five:
+When working with numeric data in R, one rarely works with single numbers. Instead, one will have to deal with *vectors* of numbers, one-dimensional arrays which contain many elements. A vector in R can be created by using the `c()` function which takes an arbitrary number of values and concatenates them forming a vector. Here is a vector containing the numbers from one to five:
 
 ```{r echo=FALSE}
 printInlineConsole("3a", "c(1,2,3,4,5)")
 printOutput("3a")
 ```
 
-Vectors of incrementing integers can be more easily created by using the `:` operator: Above expression is equivalent to `1:5`. Replace above expression by using the colon operator and print out a larger vector of numbers, maybe the numbers from one to 200. You can also create a sequence of decreasing integers by first typing the start integer, then the colon, and then the smaller end integer: 
+Vectors of sequential integers can be more easily created by using the `:` operator: Above expression is equivalent to `1:5`. Replace above expression by using the colon operator and print out a larger vector of numbers, maybe the numbers from one to 200. You can also create a sequence of decreasing integers by first typing the start integer, then the colon, and then the smaller end integer: 
 
 ```{r echo=FALSE}
 printInlineConsole("3b", "10:1")
@@ -181,14 +181,14 @@ printConsole("4", "gdp <- c(16244600, 8358400, 5960180)")
 printOutput("4")
 ```
  
-To access a specific element of a vector, one types the name of the vector followed by `[index]` where index is an integer specifying the position of the element which one would like to retrieve. Since indices start with one in R, `gdp[1]` will return `16244600`. Select the individual elements of the gdp vector. Observe also what happens if you select an index larger than the length of the vector. If you are unsure how many elements a vector has, you can use the `length` function as in `length(gdp)`. It is also possible to put a vector of indices into the square brackets. `gdp[1:2]` will return the first two elements of the gdp vector, whereas `gdp[c(1,3)]` will return the first and third element. As if that was not enough, it is also possible to supply a negative index. In that case, the returned vector consists of all elements *except* those corresponding to the supplies index. Thus, `gdp[c(1,3)]` is equivalent to `gdp[-2]`.
+To access a specific element of a vector, one types the name of the vector followed by `[index]` where index is an integer specifying the position of the element which one would like to retrieve. Since indices start with one in R, `gdp[1]` will return `16244600`. Select the individual elements of the gdp vector. Observe also what happens if you select an index larger than the length of the vector. If you are unsure how many elements a vector has, you can use the `length` function as in `length(gdp)`. It is also possible to put a vector of indices into the square brackets. `gdp[1:2]` will return the first two elements of the GDP vector, whereas `gdp[c(1,3)]` will return the first and third element. As if that was not enough, it is also possible to supply a negative index. In that case, the returned vector consists of all elements *except* those corresponding to the supplies index. Thus, `gdp[c(1,3)]` is equivalent to `gdp[-2]`.
 
 Also very useful are the functions `max` and `min`,  which return the largest and smallest element of a vector, respectively. 
  
  
 Vectors in R cannot only hold numeric data, but any data type such as dates, strings etc. 
 
-Let us also create a string containing the names of the countries with above GDPs:
+Let us also create a string containing the names of the countries whom the GDP values above belong to:
 
 ```{r echo=FALSE}
 printInlineConsole("4b", "countries <- c('USA', 'China', 'Japan')")

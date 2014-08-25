@@ -181,7 +181,7 @@ printConsole("4", "mySum = 0\nfor (i in 1:100) {\n  mySum = mySum + i\n}\nmySum"
 printOutput("4")
 ```
 
-Obvisouly it is much more concise to simply type `sum(1:100)` in this case. However, the latter solution is not only preferable because of brevity: Loops in R are horribly slow, and so when possible it is always more advantageous to write vectorized code. 
+Obviously it is much more concise to simply type `sum(1:100)` in this case. However, the latter solution is not only preferable because of brevity: Loops in R are horribly slow, and so when possible it is always more advantageous to write vectorized code. 
 
 <div class="hint">
 <h4>Timing R execution speed</h4>
