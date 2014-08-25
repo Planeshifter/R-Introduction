@@ -55,7 +55,7 @@ div .hint{
   background: gainsboro;
 }
 
-table,th,td
-{
-border:1px solid black;
+table, th, td {
+  font-size:12px;
+  padding: 6px;
 }

@@ -38,9 +38,9 @@ if (solution != ""){
  
 printConsole = function(id, input="", label="Console:", output="Output:",plot = FALSE){
 if (plot == TRUE){
-tags$div(class = "header", style="width:100%",
+tags$div(class = "header", style="width:100%; height:500px",
 tags$label(label, style="font-weight:bold"),
-tags$textarea(id=paste("code",id,sep="-"), type="text",rows="10",, input),
+tags$textarea(id=paste("code",id,sep="-"), type="text",rows="10", input),
 tags$label(output),
 plotOutput(paste("codeplot", id, sep="-")))
 } else {
@@ -119,17 +119,65 @@ printOutput("1ex3")
 
 Besides the `sample` function, R contains functions to draw samples from a wide range of statistical distributions, calculate their probability density functions (pdf), cumulative density functions (CDF) and quantiles. Generating data from a statistical distribution is very useful in simulation studies, for example to judge the effectiveness of a new statistical method: Because the data is simulated and thus all parameters are known, it is possible to assess how well the statistical model recovers the underlying parameters.
 
-```{r echo=FALSE}
-inputPanel(
-  selectInput("n_breaks", label = "Number of bins:",
-              choices = c(10, 20, 35, 50), selected = 20),
-  
-  sliderInput("bw_adjust", label = "Bandwidth adjustment:",
-              min = 0.2, max = 2, value = 1, step = 0.2)
-)
+R comed out-of-the box with an extensive support for most statistica distributions, and even more distributions are available through third-party packages. For each distribution, there are four functions in R, which are named in the form rxxx, dxxx, pxxx and qxxx , where xxx is a placeholder for the name of the distribution. These functions are:
 
-renderPlot({
-  
-})
+- rxxx: generates draws from the distribution
+- dxxx: probability density function (pdf) or mass function (pmf)
+- pxxx: cumulative distribution function (cdf)
+- qxxx: quantile function (= inverse of cdf)
+
+To give a concrete example, the normal distribution has the functions `dnorm` to generate samples drawn from a normal distribution, `dnorm` to evaluate the density at different realizations of a normally distributed random variable, `pnorm` which returns the value of the cdf for the supplied values and `qnorm` which returns for given probabilities the values of the random variable will be less than or equal to them. As usual, all of these functions are vectorized, so it is possible to for example retrieve the values of the pdf for a sequence of values:
+
+```{r echo=FALSE}
+printConsole("5", "x_seq = seq(-1, 1, by=0.1)\nx_densities = dnorm(x_seq)\nplot(x_seq, x_densities, type='l')",
+             "","",TRUE)
+printOutput("5")
 ```
+
+Since we have not supplied any values fot the mean and standard deviation of the normal distribution, the default parameters of a standard normal distribution are assumed (namely mean zero and a standard deviation of the value one). Recall that you can always look up the help pages for every function (like `?dnorm`). The arguments that the density functions, dxxx, take differ only in the parameters of the statistical distribution: The first argument is always a vector of values the random variable could take, and the following arguments are the parameters of the distribution. The same holds for the cdf and quantile functions, except that the latter expects a vector of probabilities which are mapped back to the values the random variable can take in the sample space. 
+
+The rxxx functions expect as a first argument the number of observations that should be generated. If they receive a vector instead of a number here, the length of the vector is used as the number of samples to be drawn. Let us look at a few more examples: 
+
+```{r echo=FALSE}
+printInlineConsole("6", "rnorm(50, mean = 12, sd = 3)",
+             "Generates 50 observations from a N(12, 9) distribution","")
+printOutput("6")
+
+printInlineConsole("7", "dpois(4, lambda = 3)",
+             "Calculates Prob(X=4) for a Poisson distribution with parameter lambda = 3 ","")
+printOutput("7")
+
+printInlineConsole("8", "qbinom(c(0.25, 0.5, 0.75), size=100, prob=0.3)",
+             "Calculates the three quartiles of a Binomial distribution with success probability of 0.3 and a size of 100 at each trial","")
+printOutput("8")
+
+printInlineConsole("9", "1 - punif(6, min=1, max = 10)",
+             "P(X > 6) when X is uniformly distributed between 1 and 10","")
+printOutput("9")
+
+```
+
+The following table shows the parameters of the most common statistical distributions in R:
+
+<table class="table table-striped table-bordered">
+  <tr><th>Distribution</th><th>R Name</th><th>Parameters</th></tr>
+  <tr><td>Beta</td><td>beta</td><td>shape1, shape2, ncp</td></tr>
+  <tr><td>Binomial</td><td>binom</td><td>size, prob</td></tr>
+  <tr><td>Cauchy</td><td>cauchy</td><td>location, scale</td></tr>
+  <tr><td>Chi-Squared</td><td>chisq</td><td>df, ncp</td></tr>
+  <tr><td>Exponential</td><td>exp</td><td>rate</td></tr>
+  <tr><td>F</td><td>f</td><td>df1, df2, ncp</td></tr>
+  <tr><td>Gamma</td><td>gamma</td><td>shape, scale</td></tr>
+  <tr><td>Geometric</td><td>geom</td><td>prob</td></tr>
+  <tr><td>Hypergeometric</td><td>hyper</td><td>m, n, k</td></tr>
+  <tr><td>Log-Normal</td><td>lnorm</td><td>meanlog, sdlog</td></tr>
+  <tr><td>Logistic</td><td>logis</td><td>location, scale</td></tr>
+  <tr><td>Negative Binomial</td><td>nbinom</td><td>size, prob</td></tr>
+  <tr><td>Normal</td><td>norm</td><td>mean, sd</td></tr>
+  <tr><td>Poisson</td><td>pois</td><td>lambda</td></tr>
+  <tr><td>Student's T</td><td>t</td><td>df, ncp</td></tr>
+  <tr><td>Uniform</td><td>unif</td><td>min, max</td></tr>
+  <tr><td>Weibull</td><td>weibull</td><td>shape, scale</td></tr>
+  <tr><td>Wilcoxon</td><td>wilcox</td><td>m, n</td></tr>
+</table>
 

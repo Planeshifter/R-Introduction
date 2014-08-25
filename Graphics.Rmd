@@ -8,3 +8,183 @@ highlight: null
 css: css/styles.css
 runtime: shiny
 ---
+
+
+<link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=Lato:400,700' rel='stylesheet' type='text/css'>
+
+```{r echo=FALSE}
+
+includeScript("www/solutionButton.js")
+
+library(stringr)
+
+printInlineConsole = function(id, input="", label="Console:", output="Output: ", solution=""){
+if (solution != ""){
+  tags$div(class = "header", style="width:100%",
+  tags$label(label, style="font-weight:bold"),
+  tags$input(id=paste("code",id,sep="-"), type="text", value=input, class="exercise_input"),
+  tags$button(id=paste("btn",id,sep="-"),type="button", value=solution, class="exercise_solution_btn","Solution"),
+  tags$label(output),
+  verbatimTextOutput(paste("coderun", id, sep="-")))
+
+} else {
+  tags$div(class = "header", style="width:100%",
+  tags$label(label, style="font-weight:bold"),
+  tags$input(id=paste("code",id,sep="-"), type="text", value=input),
+  tags$label(output),
+  verbatimTextOutput(paste("coderun", id, sep="-")))
+}
+}
+
+printInlinePlotConsole = function(id, input="", label="Console:", output="Output: ", solution=""){
+if (solution != ""){
+  tags$div(class = "header", style="width:100%",
+  tags$label(label, style="font-weight:bold"),
+  tags$input(id=paste("code",id,sep="-"), type="text", value=input, class="exercise_input"),
+  # tags$button(id=paste("btn",id,sep="-"),type="button", value=solution, class="exercise_solution_btn","Solution"),
+  tags$label(output),
+  plotOutput(paste("codeplot", id, sep="-")))
+
+} else {
+  tags$div(class = "header", style="width:100%",
+  tags$label(label, style="font-weight:bold"),
+  tags$input(id=paste("code",id,sep="-"), type="text", value=input),
+  tags$label(output),
+  plotOutput(paste("codeplot", id, sep="-")))
+}
+}
+
+printConsole = function(id, input="", label="Console:", output="Output:",plot = FALSE){
+if (plot == TRUE){
+tags$div(class = "header", style="width:100%; height:500px",
+tags$label(label, style="font-weight:bold"),
+tags$textarea(id=paste("code",id,sep="-"), type="text",rows="5", input),
+tags$label(output),
+plotOutput(paste("codeplot", id, sep="-")))
+} else {
+tags$div(class = "header", style="width:100%;",
+tags$label(label, style="font-weight:bold"),
+tags$textarea(id=paste("code",id,sep="-"), type="text", input),
+tags$label(output),
+verbatimTextOutput(paste("coderun", id, sep="-")))
+}
+}
+
+printOutput = function(id){
+terminalId = paste("code",id,sep="-")
+output[[paste("coderun",id, sep="-")]] = renderPrint({
+plotloc=str_locate(input[[terminalId]],"plot")
+eval(parse(text=input[[terminalId]]))
+})
+output[[paste("codeplot",id, sep="-")]] = renderPlot({
+plotloc=str_locate(input[[terminalId]],"plot")
+eval(parse(text=input[[terminalId]]))
+})
+}
+```
+
+## Overview
+
+Graphics and Plots are an area in which R truly shines. Base R provides extensive plotting capabilities, and there are many other popular libraries that can be used to create beautiful plots and graphics. Besides *base* graphics, the two libraries *lattice* and *ggplot2* are the two most widely used ones. *Lattice* is most useful for creating graphics consisting of multiple plots and three-dimensional plots, whereas *ggplot2* is more limited in its functionality but provides a very clean syntax which enables creating plots on the fly and changing elements by sequentially making changes to the plot. However, most plot types which can be created using these packages can just as well be created using the *base* graphics package, which is also the easist to get started with. Hence, we will solely consider *base* graphics in this post, but in case that you are interested in the alternatives, there are plenty of resources online to get you started.
+
+Let us our exploration of the plotting functions in R with the *plot* function, which is used to created scatter plots
+
+### Plot()
+
+```{r echo=FALSE}
+printInlinePlotConsole("1", "plot(x = 1:12, y = 101:112)","","", TRUE)
+printOutput("1")
+```
+
+The `plot` function is most of the time used by passing it two numeric vectors of the same length. The second vector is plotted against the first, which results in a standard scatter plot. These types of plots are most useful as a tool to explore the relationship of two numeric variables, and it is always a good idea to produce a scatterplot before running a regression as plots can often reveal patterns which might otherwise go unnoticed if one were solely looking at quantitative variables (e.g. the correlation coefficient only measures *linear* dependencies and thus cannot render non-linear dependencies visible)..
+
+If one passes only a single vector to the `plot` function, the elements of the vector are plotted against their indices (= 1:length(x)). Hence, above plot can also created by calling `plot(101:112)`, since the corresponding vector of indices is `1:12`.
+The `type` parameter of the function controls whether lines or points are drawn and how they appear. The following options are provided:
+
+<table class="table table-striped table-bordered">
+  <tr><th>Option</th><th>Description</th></tr>
+  <tr><td>p</td><td>plots points</td></tr>
+  <tr><td>l</td><td>plots a line</td></tr>
+  <tr><td>b</td><td>both points and lines</td></tr>
+  <tr><td>o</td><td>overplotted points and lines</td></tr>
+  <tr><td>h</td><td>histogram-like vertical lines</td></tr>
+  <tr><td>s</td><td>stair step lines</td></tr>
+  <tr><td>n</td><td>no plotting</td></tr>
+</table>
+
+Let us try these options out on a plot of the pdf of a normal distribution with its iconic bell-shaped form:
+
+```{r echo=FALSE}
+printInlinePlotConsole("2", "plot(x = seq(-3, 3, by = 0.1), y = dnorm(seq(-3, 3, by = 0.1)), type='l')","","", TRUE)
+printOutput("2")
+```
+
+In case that you are about to complain that the axes labels on this plot are rather sub-optimal, hold your horses! We will change them in a second: Using the `xlab` and `ylab` arguments, we can supply captions for the two axes to the plot function, e.g.
+
+
+```{r echo=FALSE}
+printInlinePlotConsole("3", "plot(x = seq(-3, 3, by = 0.1), y = dnorm(seq(-3, 3, by = 0.1)), xlab='x', ylab='p(x)')","","", TRUE)
+printOutput("3")
+```
+
+The following arguments of the plot function allow further customization of the appearance of the plot:
+
+- `axes`: Defaults to TRUE, if FALSE axes are suppressed
+- `main`: Title which appears at the top of the plot
+- `sub`: Substitle which appears under the x-axis
+- `xlim`: Constrains the range of the x-axis.
+- `ylim`: Constrains the range of the y-axis.
+
+As an exercise, try creating a scatter plot of the `women` data set, which contains height and weight measurements for a sample of 15 American women aged 30-39.
+
+```{r echo=FALSE}
+printInlineConsole("4", "women",
+             "The data set:","")
+printOutput("4")
+
+```
+
+By convention, the dependent variable always goes on the y-axis and the independent variable is plotted on the x-axis (what is the dependent variable in this case?). Create a plot and add some informative captions and axes labels (the units of measurement - in this case ln and lbs - should be displayed):
+
+```{r echo=FALSE}
+printConsole("5", "",
+             "Your plot:","",TRUE)
+printOutput("5")
+```
+
+### Curve()
+The curve function can be used to create line plots for *function* expressions. Recall that previously, we have created a plot of the pdf of a normal distribution by generating a sequence of data points and evaluating the pdf at each of these points. Now, in order to create a smooth-looking plot, you will have to create a large number of points. But there is an easier way: using the `curve` function we can produce line plots for any function. The curve function expects the function as its first argument. Then, the second and third arguments, *from* and *to* determine the range of values for which the function should be plotted. For example:
+
+```{r echo=FALSE}
+printInlinePlotConsole("6", "curve(pnorm, -3, 3)",
+             "CDF of a standard normal distribution:","")
+printOutput("6")
+```
+
+Luckily, we are not constrained to pre-defined functions but can roll out our own: To plot $log(1 + x)$ against $x$ for the range from zero to 20, we can write
+
+```{r echo=FALSE}
+printConsole("7", "logOnePlusX = function(x){\n  log(1 + x)\n}\ncurve(logOnePlusX, 0, 20)",
+             "","",TRUE)
+printOutput("7")
+```
+
+
+As a short-cut, it is also possible to simply pass the expression `log(1+x)` to the curve function itself, i.e. `curve(log(1+x))`. For this to work the expression has to be written as a function of *x*.
+
+<div class="hint">
+<h4>Plotting distributons with non-default parameter values</h4>
+
+We now know how to easily plot the distribution functions like `dxxx` (pdf), `pxxx` (cdf), `qxxx` (quantile function): We simply passing them as an argument to the `curve` function and define the range over which we would like them to be plotted. However, you might ask yourself whether we can use this approach also when we do not have the default paramters, e.g. when we want to visualize not a standard normal, but a normal with a non-zero mean. Or a uniform distribution where the domain is not over zero-one, but from zero to ten. The answer is yes! The trick is to define a new function from the basic distribution functions where the parameters are set to the appropriate values. This gan be best illustrated via an example. The following code displays the pdf of a normal with mean 15 and standard deviation of three:
+
+</div>
+
+```{r echo=FALSE}
+printConsole("8", "dnorm_custom = function(x){
+  dnorm(x, mean=10, sd=3)
+}
+curve(dnorm_custom, 0, 20)",
+             "","",TRUE)
+printOutput("8")
+```
