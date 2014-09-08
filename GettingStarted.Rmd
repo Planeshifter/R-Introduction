@@ -16,6 +16,8 @@ It supports various ways to import data, which can then be analyzed or manipulat
 or alternatively functions from various community-generated libraries. 
 
 R is open-source software, which might partly explain why it took of in the statistical community (and beyond), such that nowadays
-one can find R packages to perform almost any imaginable task. I would argue that this is R's main selling point: Due to the abundance of
-researches working with R, there are packages not only for creating basic summary statistics or running linear regressions, but it is quite 
+one can find R packages to perform almost any imaginable task. I would argue that this is R's main selling point: Due to the enormous number of
+researchers working with R, there are packages not only for creating basic summary statistics or running linear regressions, but it is quite 
 likely that even for very exotic methods, there is probably an R package implementing them. 
+
+
