@@ -3,14 +3,14 @@ title: "An Introduction to R"
 subtitle: "Part 5: Programming Concepts"
 output:
 html_document:
+includes:
+  in_header: header.html
 theme: null
 highlight: null
 css: css/styles.css
 runtime: shiny
 ---
 
-<link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
-<link href='http://fonts.googleapis.com/css?family=Lato:400,700' rel='stylesheet' type='text/css'>
  
 ```{r echo=FALSE}
  
@@ -241,5 +241,3 @@ printOutput("5ex1")
 printConsole("5ex2", "","Using a while loop, write a function that for a given value n computes the sum of squared integers from 1 to n:")
 printOutput("5ex2")
 ```
-
-## Apply Family of Functions

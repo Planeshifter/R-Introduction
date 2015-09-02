@@ -3,14 +3,13 @@ title: "An Introduction to R"
 subtitle: "Part 2: Working with Numbers"
 output:
 html_document:
+includes:
+  in_header: header.html
 theme: null
 highlight: null
 css: css/styles.css
 runtime: shiny
 ---
-
-<link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
-<link href='http://fonts.googleapis.com/css?family=Lato:400,700' rel='stylesheet' type='text/css'>
  
 ```{r echo=FALSE}
  
@@ -18,7 +17,7 @@ includeScript("www/solutionButton.js")
 
 library(stringr)
  
-printInlineConsole = function(id, input="", label="Console:",output="Output: ", solution=""){
+printInlineConsole = function(id, input="", label="Console:",output="", solution=""){
 if (solution != ""){
   tags$div(class = "header", style="width:100%",
   tags$label(label, style="font-weight:bold"),
@@ -36,7 +35,7 @@ if (solution != ""){
 }
 }
  
-printConsole = function(id, input="", label="Console:", output="Ouput:",plot = FALSE){
+printConsole = function(id, input="", label="Console:", output="",plot = FALSE){
 if (plot == TRUE){
 tags$div(class = "header", style="width:100%",
 tags$label(label, style="font-weight:bold"),

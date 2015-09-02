@@ -3,14 +3,13 @@ title: "An Introduction to R"
 subtitle: "Part 4: Other Data Types"
 output:
 html_document:
+includes:
+  in_header: header.html
 theme: null
 highlight: null
 css: css/styles.css
 runtime: shiny
 ---
-
-<link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
-<link href='http://fonts.googleapis.com/css?family=Lato:400,700' rel='stylesheet' type='text/css'>
 
 ```{r echo=FALSE}
 
@@ -203,12 +202,14 @@ printOutput("15")
 ```
 
 Last but not least, the inverse of a matrix $A$ is the matrix $A^{-1}$ such that 
-$A A^{-1} = \left(\begin{array}{ccc}
+$$
+A A^{-1} = \left(\begin{array}{ccc}
 1 & \ldots & 0\\
 \vdots & \ddots & \vdots\\
 0 & \ldots & 1
-\end{array}\right)
- $, that is the product of a matrix and its inverse must equal the so-called *identity* matrix which has ones on its main diagonal and zeros everywhere else. The inverse can be obtained via a call to the `solve()` function. 
+\end{array}\right),
+$$
+that is the product of a matrix and its inverse must equal the so-called *identity* matrix which has ones on its main diagonal and zeros everywhere else. The inverse can be obtained via a call to the `solve()` function. 
 
 ## Arrays 
 With vectors, we already encountered arrays in one dimension and as we have just finished our discussion of matrices, we also know how to work with 2-dimensional arrays in R. As you can imagine, it is also possible to work with arrays of dimension three or larger. An array can be created in a fashion very similar to a matrix: One calls the `array` function and gives it as its first argument the vector of elements. As its second parameter, the function expects a `dim` argument which is a vector specifying the index lengths for each dimension:

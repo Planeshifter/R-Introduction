@@ -3,15 +3,14 @@ title: "An Introduction to R"
 subtitle: "Part 6: Graphics"
 output:
 html_document:
+includes:
+  in_header: header.html
 theme: null
 highlight: null
 css: css/styles.css
 runtime: shiny
 ---
 
-
-<link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
-<link href='http://fonts.googleapis.com/css?family=Lato:400,700' rel='stylesheet' type='text/css'>
 
 ```{r echo=FALSE}
 
